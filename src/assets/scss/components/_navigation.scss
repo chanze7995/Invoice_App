@@ -1,0 +1,28 @@
+.navContainer {
+  display: flex;
+  flex-direction: row;
+  z-index: 99;
+  background-color: $container-color;
+  @media (min-width: 900px) {
+    min-height: 100%;
+    min-width: 90px;
+    flex-direction: column;
+    border-radius: 0 20px 20px 0;
+  }
+
+  .brandingImg {
+    display: flex;
+    justify-content: center;
+    border-radius: 0 20px 20px 0;
+    background-color: $primary-color;
+    padding: 24px;
+    @media (min-width: 900px) {
+      width: 100%;
+    }
+
+    img {
+      width: auto;
+      height: 35px;
+    }
+  }
+}

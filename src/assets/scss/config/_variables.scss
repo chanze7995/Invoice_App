@@ -1,6 +1,17 @@
 //color
-$red: #ec5757;
-$purple: #7c5dfa;
-$green: #33d69f;
-$orange: #ff8f00;
-$dark-purple: #252945;
+$pass-color: #33d69f;
+$caution-color: #ff8f00;
+$warning-color: #ec5757;
+
+// Puerto Rico: hsl(177, 39%, 54%)
+$primary-hue: 177;
+$sat: 39%;
+$lig: 54%;
+
+$primary-color: hsl($primary-hue, $sat, $lig);
+$primary-color-alt: hsl($primary-hue, $sat, 50%); /* -4% */
+$container-color: hsl($primary-hue, 32%, 12%);
+$body-color: hsl($primary-hue, 48%, 8%);
+$title-color: hsl($primary-hue, 15%, 95%);
+$text-color: hsl($primary-hue, 8%, 75%);
+$text-color-light: hsl($primary-hue, 4%, 55%);

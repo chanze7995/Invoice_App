@@ -1,0 +1,18 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  background-color: $body-color;
+  min-height: 100vh;
+
+  @media (min-width: 900px) {
+    flex-direction: row;
+  }
+
+  .appContainer {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    position: relative;
+    padding: 0 20px;
+  }
+}
