@@ -1,0 +1,188 @@
+.invoice-wrap {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: scroll;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  @media (min-width: 900px) {
+    left: 90px;
+  }
+
+  .invoice-content {
+    position: relative;
+    padding: 56px;
+    max-width: 700px;
+    width: 100%;
+    background-color: $body-color;
+    color: #fff;
+    box-shadow: 10px 4px 6px -1px rgba(0, 0, 0, 0.2),
+      0 2px 4px -1px rgba(0, 0, 0, 0.06);
+
+    h2 {
+      font-size: $big-font-size;
+      margin-bottom: 48px;
+      color: #fff;
+    }
+
+    h3 {
+      font-size: $normal-font-size;
+      margin-bottom: 24px;
+      color: $primary-color;
+    }
+
+    // Bill To / Bill From
+    .bill-to,
+    .bill-from {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 48px;
+
+      .location-details {
+        display: flex;
+        gap: 16px;
+
+        div {
+          flex: 1;
+        }
+      }
+    }
+
+    // Invoice Work
+
+    .invoice-work {
+      display: flex;
+      flex-direction: column;
+
+      .payment {
+        display: flex;
+        gap: 24px;
+
+        div {
+          flex: 1;
+        }
+      }
+
+      .work-items {
+        .item-list {
+          width: 100%;
+
+          // Item Table Styling
+          .table-heading,
+          .table-items {
+            display: flex;
+            gap: 16px;
+            font-size: $smaller-font-size;
+
+            .item-name {
+              flex-basis: 50%;
+            }
+
+            .qty {
+              flex-basis: 10%;
+            }
+
+            .price {
+              flex-basis: 20%;
+            }
+
+            .total {
+              display: flex;
+              flex-basis: 20%;
+              align-self: center;
+            }
+          }
+
+          .table-heading {
+            margin-bottom: 16px;
+
+            th {
+              text-align: left;
+            }
+          }
+
+          .table-items {
+            position: relative;
+            margin-bottom: 24px;
+
+            img {
+              position: absolute;
+              top: 15px;
+              right: 0;
+              width: 12px;
+              height: 16px;
+            }
+          }
+        }
+
+        .button {
+          @extend %button;
+          display: flex;
+          color: #fff;
+          background-color: $container-color-alt;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
+
+          img {
+            margin-right: 4px;
+          }
+        }
+      }
+    }
+
+    .btnContainer {
+      display: flex;
+      margin-top: 60px;
+
+      div {
+        flex: 1;
+      }
+
+      .keep-btn {
+        display: flex;
+        justify-content: flex-end;
+      }
+    }
+  }
+
+  button {
+    @extend %button;
+  }
+
+  .plus-icon {
+    width: 10px;
+  }
+
+  .input {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 24px;
+  }
+
+  label {
+    font-size: $smaller-font-size;
+    margin-bottom: 6px;
+  }
+
+  input,
+  select {
+    width: 100%;
+    background-color: $container-color;
+    color: #fff;
+    border-radius: 4px;
+    padding: 12px 4px;
+    border: none;
+
+    &:focus {
+      outline: none;
+    }
+  }
+}

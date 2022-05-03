@@ -1,15 +1,28 @@
 <template>
   <div class="app">
     <Navigation />
-    <router-view />
+    <div class="appContainer">
+      <!-- <AlertModal v-if="isAlertModalActive"/> -->
+      <!-- <transition name="invoiceModal">
+        <InvoiceModal v-if="isInvoiceModalOpen"/>
+      </transition> -->
+      <InvoiceModal />
+      <router-view />
+    </div>
   </div>
 </template>
 
 <script>
 import Navigation from '@/components/Navigation.vue'
+import InvoiceModal from '@/components/InvoiceModal.vue'
+
 export default {
   components: {
-    Navigation
+    Navigation,
+    InvoiceModal
+  },
+  setup () {
+
   }
 }
 </script>
