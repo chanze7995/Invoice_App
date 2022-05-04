@@ -72,8 +72,8 @@
         <div class="input">
           <label for="paymentTerms">Payment Terms</label>
           <select required id="paymentTerms" v-model="invoiceModalInfo.paymentTerms">
-            <option value="30">Net 30 Days</option>
-            <option value="60">Net 60 Days</option>
+            <option value="30">30日後</option>
+            <option value="60">60日後</option>
           </select>
         </div>
         <div class="input">
@@ -121,7 +121,7 @@
 </template>
 
 <script>
-import { reactive } from 'vue'
+import { reactive, watch } from 'vue'
 import { useStore } from 'vuex'
 
 export default {
@@ -156,6 +156,18 @@ export default {
     const closeInvoiceModal = () => {
       store.dispatch('toggleInvoiceModalOpen')
     }
+
+    invoiceModalInfo.invoiceDateUnix = Date.now()
+    invoiceModalInfo.invoiceDate = new Date(invoiceModalInfo.invoiceDateUnix).toLocaleDateString('zh-tw', invoiceModalInfo.dateOptions)// 台灣格式
+    // invoiceModalInfo.invoiceDate = new Date(invoiceModalInfo.invoiceDateUnix).toLocaleDateString('en-us', invoiceModalInfo.dateOptions)
+
+    watch(() => invoiceModalInfo.paymentTerms, () => {
+      const futureDate = new Date()
+      invoiceModalInfo.paymentDueDateUnix = futureDate.setDate(futureDate.getDate() + parseInt(invoiceModalInfo.paymentTerms))
+      invoiceModalInfo.paymentDueDate = new Date(invoiceModalInfo.paymentDueDateUnix).toLocaleDateString('zh-tw', invoiceModalInfo.dateOptions)// 台灣格式
+      // invoiceModalInfo.paymentDueDate = new Date(invoiceModalInfo.paymentDueDateUnix).toLocaleDateString('en-us', invoiceModalInfo.dateOptions)
+    })
+
     return {
       invoiceModalInfo,
       closeInvoiceModal
