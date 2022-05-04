@@ -3,10 +3,9 @@
     <Navigation />
     <div class="appContainer">
       <!-- <AlertModal v-if="isAlertModalActive"/> -->
-      <!-- <transition name="invoiceModal">
+      <transition name="invoiceModal">
         <InvoiceModal v-if="isInvoiceModalOpen"/>
-      </transition> -->
-      <InvoiceModal v-if="isInvoiceModalOpen"/>
+      </transition>
       <router-view />
     </div>
   </div>
@@ -15,8 +14,8 @@
 <script>
 import Navigation from '@/components/Navigation.vue'
 import InvoiceModal from '@/components/InvoiceModal.vue'
-import { useStore } from 'vuex'
 import { computed } from 'vue'
+import { useStore } from 'vuex'
 
 export default {
   components: {

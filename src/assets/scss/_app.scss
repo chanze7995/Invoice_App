@@ -16,3 +16,15 @@
     padding: 0 20px;
   }
 }
+
+// animated invoiceModal
+
+.invoiceModal-enter-active,
+.invoiceModal-leave-active {
+  transition: 0.8s ease all;
+}
+
+.invoiceModal-enter-from,
+.invoiceModal-leave-to {
+  transform: translateX(-700px);
+}
