@@ -123,6 +123,7 @@
 <script>
 import { reactive, watch } from 'vue'
 import { useStore } from 'vuex'
+import { uid } from 'uid'
 
 export default {
   name: 'InvoiceModal',
@@ -168,9 +169,24 @@ export default {
       // invoiceModalInfo.paymentDueDate = new Date(invoiceModalInfo.paymentDueDateUnix).toLocaleDateString('en-us', invoiceModalInfo.dateOptions)
     })
 
+    const addNewInvoiceItem = () => {
+      invoiceModalInfo.invoiceItemList.push({
+        id: uid(),
+        itemName: '',
+        qty: '',
+        price: 0,
+        total: 0
+      })
+    }
+    const deleteInvoiceItem = (id) => {
+      invoiceModalInfo.invoiceItemList = invoiceModalInfo.invoiceItemList.filter(item => item.id !== id)
+    }
+
     return {
       invoiceModalInfo,
-      closeInvoiceModal
+      closeInvoiceModal,
+      addNewInvoiceItem,
+      deleteInvoiceItem
     }
   }
 }
