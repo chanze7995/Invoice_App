@@ -30,18 +30,25 @@
 
 <script>
 import { ref } from 'vue'
+import { useStore } from 'vuex'
+
 export default {
   name: 'Home',
   components: {
   },
   setup () {
+    const store = useStore()
     const isFilterMenuOpen = ref(false)
     const toggleFilterMenu = () => {
       isFilterMenuOpen.value = !isFilterMenuOpen.value
     }
+    const newInvoiceModal = () => {
+      store.dispatch('toggleInvoiceModalOpen')
+    }
     return {
       isFilterMenuOpen,
-      toggleFilterMenu
+      toggleFilterMenu,
+      newInvoiceModal
     }
   }
 }

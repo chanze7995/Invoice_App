@@ -6,7 +6,7 @@
       <!-- <transition name="invoiceModal">
         <InvoiceModal v-if="isInvoiceModalOpen"/>
       </transition> -->
-      <InvoiceModal />
+      <InvoiceModal v-if="isInvoiceModalOpen"/>
       <router-view />
     </div>
   </div>
@@ -15,6 +15,8 @@
 <script>
 import Navigation from '@/components/Navigation.vue'
 import InvoiceModal from '@/components/InvoiceModal.vue'
+import { useStore } from 'vuex'
+import { computed } from 'vue'
 
 export default {
   components: {
@@ -22,7 +24,16 @@ export default {
     InvoiceModal
   },
   setup () {
+    const store = useStore()
 
+    const isInvoiceModalOpen = computed(() => {
+      return store.getters.isInvoiceModalOpen
+    })
+
+    return {
+
+      isInvoiceModalOpen
+    }
   }
 }
 </script>

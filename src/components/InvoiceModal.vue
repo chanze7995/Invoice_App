@@ -122,9 +122,13 @@
 
 <script>
 import { reactive } from 'vue'
+import { useStore } from 'vuex'
+
 export default {
   name: 'InvoiceModal',
   setup () {
+    const store = useStore()
+
     const invoiceModalInfo = reactive({
       dateOptions: { year: 'numeric', month: 'short', day: 'numeric' },
       docId: null,
@@ -149,8 +153,12 @@ export default {
       invoiceItemList: [],
       invoiceTotal: 0
     })
+    const closeInvoiceModal = () => {
+      store.dispatch('toggleInvoiceModalOpen')
+    }
     return {
-      invoiceModalInfo
+      invoiceModalInfo,
+      closeInvoiceModal
     }
   }
 }
