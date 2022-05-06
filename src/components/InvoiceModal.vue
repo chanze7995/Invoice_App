@@ -121,6 +121,8 @@
 </template>
 
 <script>
+import db from '../firebase/firebaseInit'
+
 import { reactive, watch } from 'vue'
 import { useStore } from 'vuex'
 import { uid } from 'uid'
@@ -181,12 +183,71 @@ export default {
     const deleteInvoiceItem = (id) => {
       invoiceModalInfo.invoiceItemList = invoiceModalInfo.invoiceItemList.filter(item => item.id !== id)
     }
+    const saveDraft = () => {
+      invoiceModalInfo.invoiceDraft = true
+    }
+    const publishInvoice = () => {
+      invoiceModalInfo.invoicePending = true
+    }
+    const calInvoiceTotal = () => {
+      invoiceModalInfo.invoiceTotal = 0
+      invoiceModalInfo.invoiceItemList.forEach((item) => {
+        invoiceModalInfo.invoiceTotal += item.total
+      })
+    }
+
+    const uploadInvoice = async () => {
+      if (invoiceModalInfo.invoiceItemList.length <= 0) {
+        alert('Please ensure you filled out work items!')
+        return
+      }
+
+      calInvoiceTotal()
+
+      const dataBase = db.collection('invoices').doc()
+
+      await dataBase.set({
+        invoiceId: uid(6), // id只有6個字元，預設為11個字元
+        billerStreetAddress: invoiceModalInfo.billerStreetAddress,
+        billerCity: invoiceModalInfo.billerCity,
+        billerZipCode: invoiceModalInfo.billerZipCode,
+        billerCountry: invoiceModalInfo.billerCountry,
+        clientName: invoiceModalInfo.clientName,
+        clientEmail: invoiceModalInfo.clientEmail,
+        clientStreetAddress: invoiceModalInfo.clientStreetAddress,
+        clientCity: invoiceModalInfo.clientCity,
+        clientZipCode: invoiceModalInfo.clientZipCode,
+        clientCountry: invoiceModalInfo.clientCountry,
+        invoiceDate: invoiceModalInfo.invoiceDate,
+        invoiceDateUnix: invoiceModalInfo.invoiceDateUnix,
+        paymentTerms: invoiceModalInfo.paymentTerms,
+        paymentDueDate: invoiceModalInfo.paymentDueDate,
+        paymentDueDateUnix: invoiceModalInfo.paymentDueDateUnix,
+        productDescription: invoiceModalInfo.productDescription,
+        invoiceItemList: invoiceModalInfo.invoiceItemList,
+        invoiceTotal: invoiceModalInfo.invoiceTotal,
+        invoicePending: invoiceModalInfo.invoicePending,
+        invoiceDraft: invoiceModalInfo.invoiceDraft,
+        invoicePaid: null
+      })
+
+      closeInvoiceModal()
+
+      store.dispatch('getInvoiceData')
+    }
+
+    const submitForm = () => {
+      uploadInvoice()
+    }
 
     return {
       invoiceModalInfo,
       closeInvoiceModal,
       addNewInvoiceItem,
-      deleteInvoiceItem
+      deleteInvoiceItem,
+      saveDraft,
+      publishInvoice,
+      submitForm
     }
   }
 }
