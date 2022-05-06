@@ -137,7 +137,7 @@ export default {
   setup () {
     const store = useStore()
     const isLoading = ref(null)
-
+    const invoiceWrap = ref(null)
     const invoiceModalInfo = reactive({
       dateOptions: { year: 'numeric', month: 'short', day: 'numeric' },
       docId: null,
@@ -177,6 +177,14 @@ export default {
       // invoiceModalInfo.paymentDueDate = new Date(invoiceModalInfo.paymentDueDateUnix).toLocaleDateString('en-us', invoiceModalInfo.dateOptions)
     })
 
+    const clickInvoiceWrap = () => {
+      store.dispatch('toggleAlertModalActive')
+    }
+    const checkClick = (e) => {
+      if (e.target === invoiceWrap.value) {
+        clickInvoiceWrap()
+      }
+    }
     const addNewInvoiceItem = () => {
       invoiceModalInfo.invoiceItemList.push({
         id: uid(),
@@ -249,7 +257,10 @@ export default {
     }
 
     return {
+      isLoading,
+      invoiceWrap,
       invoiceModalInfo,
+      checkClick,
       closeInvoiceModal,
       addNewInvoiceItem,
       deleteInvoiceItem,
