@@ -1,6 +1,7 @@
 <template>
   <div @click="checkClick" ref="invoiceWrap" class="invoice-wrap">
     <form @submit.prevent="submitForm" class="invoice-content">
+      <Loading v-show="isLoading" />
       <h2 >New Invoice</h2>
 
       <!-- Bill From -->
@@ -121,16 +122,21 @@
 </template>
 
 <script>
-import db from '../firebase/firebaseInit'
+import Loading from '@/components/Loading.vue'
 
-import { reactive, watch } from 'vue'
+import db from '../firebase/firebaseInit'
+import { ref, reactive, watch } from 'vue'
 import { useStore } from 'vuex'
 import { uid } from 'uid'
 
 export default {
   name: 'InvoiceModal',
+  components: {
+    Loading
+  },
   setup () {
     const store = useStore()
+    const isLoading = ref(null)
 
     const invoiceModalInfo = reactive({
       dateOptions: { year: 'numeric', month: 'short', day: 'numeric' },
@@ -201,6 +207,7 @@ export default {
         alert('Please ensure you filled out work items!')
         return
       }
+      isLoading.value = true
 
       calInvoiceTotal()
 
@@ -230,6 +237,7 @@ export default {
         invoiceDraft: invoiceModalInfo.invoiceDraft,
         invoicePaid: null
       })
+      isLoading.value = false
 
       closeInvoiceModal()
 
