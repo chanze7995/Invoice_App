@@ -1,0 +1,47 @@
+.invoice {
+  display: flex;
+  text-decoration: none;
+  cursor: pointer;
+  gap: 16px;
+  margin-bottom: 16px;
+  color: #fff;
+  border-radius: 20px;
+  padding: 28px 32px;
+  background-color: $container-color;
+  align-items: center;
+
+  span {
+    font-size: 13px;
+  }
+
+  .invoice-info {
+    display: flex;
+    align-items: center;
+    flex-basis: 60%;
+    gap: 16px;
+
+    span {
+      flex: 1;
+    }
+
+    .tracking-number {
+      text-transform: uppercase;
+    }
+  }
+
+  .invoice-state {
+    display: flex;
+    gap: 16px;
+    flex-basis: 40%;
+    align-items: center;
+
+    .price {
+      flex: 1;
+      font-size: 16px;
+      font-weight: 600px;
+    }
+    .icon{
+      width: 10px;
+    }
+  }
+}
