@@ -6,7 +6,8 @@ export default createStore({
     invoiceData: [],
     isInvoiceModalOpen: false,
     isAlertModalActive: false,
-    isInvoicesLoaded: null
+    isInvoicesLoaded: null,
+    currentInvoiceArray: null
   },
   actions: {
     async getInvoiceData ({ commit, state }) {
@@ -49,12 +50,14 @@ export default createStore({
     },
     toggleAlertModalActive (context) {
       context.commit('TOGGLE_ALERT')
+    },
+    setCurrentInvoiceArray (context, invoiceId) {
+      context.commit('SET_CURRENT_INVOICE', invoiceId)
     }
   },
   mutations: {
-    SET_INVOICE_DATA (state, payload) {
-      state.invoiceData.push(payload)
-      console.log(state.invoiceData)
+    SET_INVOICE_DATA (state, data) {
+      state.invoiceData.push(data)
     },
     SET_INVOICES_LOADED (state) {
       state.isInvoicesLoaded = true
@@ -64,6 +67,11 @@ export default createStore({
     },
     TOGGLE_ALERT (state) {
       state.isAlertModalActive = !state.isAlertModalActive
+    },
+    SET_CURRENT_INVOICE (state, invoiceId) {
+      state.currentInvoiceArray = state.invoiceData.filter((invoice) => {
+        return invoice.invoiceId === invoiceId
+      })
     }
   },
   getters: {
@@ -78,6 +86,9 @@ export default createStore({
     },
     isAlertModalActive (state) {
       return state.isAlertModalActive
+    },
+    currentInvoiceArray (state) {
+      return state.currentInvoiceArray
     }
   },
   modules: {

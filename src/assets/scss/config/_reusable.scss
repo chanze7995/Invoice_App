@@ -85,9 +85,9 @@
 
 .draft {
   &::before {
-    background-color: #dfe3fa;
+    background-color: $text-color-light;
   }
 
-  color: #dfe3fa;
+  color: $text-color-light;
   background-color: rgba(223, 227, 250, 0.1);
 }

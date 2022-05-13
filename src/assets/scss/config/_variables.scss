@@ -4,8 +4,7 @@ $caution-color: #ff8f00;
 $warning-color: #ec5757;
 
 // Puerto Rico: hsl(177, 39%, 50%)
-// hsl(177, 32%, 20%)
-// hsl(177, 48%, 8%)
+// hsl(177, 73%, 93%)
 $primary-hue: 177;
 $sat: 39%;
 $lig: 54%;
@@ -14,8 +13,8 @@ $primary-color: hsl($primary-hue, $sat, $lig);
 $primary-color-alt: hsl($primary-hue, $sat, 50%); // -4%
 $container-color: hsl($primary-hue, 32%, 12%);
 $container-color-alt: hsl($primary-hue, 32%, 20%);
-$body-color: hsl($primary-hue, 48%, 8%);
 
+$body-color: hsl($primary-hue, 48%, 8%);
 $title-color: hsl($primary-hue, 15%, 95%);
 $text-color: hsl($primary-hue, 8%, 75%);
-$text-color-light: hsl($primary-hue, 4%, 55%);
+$text-color-light: hsl($primary-hue, 73%, 93%);
