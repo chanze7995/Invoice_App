@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import { computed } from 'vue'
 import { useStore } from 'vuex'
 
 export default {
@@ -23,8 +24,13 @@ export default {
     const closeInvoiceModal = () => {
       store.dispatch('toggleAlertModalActive')
       store.dispatch('toggleInvoiceModalOpen')
+      if (editInvoice.value) {
+        store.dispatch('toggleEditInvoiceClicked')
+      }
     }
-
+    const editInvoice = computed(() => {
+      return store.getters.isEditInvoiceClicked
+    })
     return {
       closeAlertModal,
       closeInvoiceModal

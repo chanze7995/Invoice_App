@@ -7,7 +7,8 @@ export default createStore({
     isInvoiceModalOpen: false,
     isAlertModalActive: false,
     isInvoicesLoaded: null,
-    currentInvoiceArray: null
+    currentInvoiceArray: null,
+    isEditInvoiceClicked: null
   },
   actions: {
     async getInvoiceData ({ commit, state }) {
@@ -53,14 +54,43 @@ export default createStore({
     },
     setCurrentInvoiceArray (context, invoiceId) {
       context.commit('SET_CURRENT_INVOICE', invoiceId)
+    },
+    toggleEditInvoiceClicked (context) {
+      context.commit('TOGGLE_EDIT_INVOICE')
+    },
+    async updateInvoice ({ commit, dispatch }, { docId, invoiceId }) {
+      commit('DELETE_INVOICE', docId)
+      await dispatch('getInvoiceData')
+      commit('TOGGLE_INVOICE')
+      commit('TOGGLE_EDIT_INVOICE')
+      commit('SET_CURRENT_INVOICE', invoiceId)
+    },
+    async deleteInvoice ({ commit }, docId) {
+      const getInvoice = db.collection('invoices').doc(docId)
+      await getInvoice.delete()
+      commit('DELETE_INVOICE', docId)
+    },
+    async updateStatusToPaid ({ commit }, docId) {
+      const getInvoice = db.collection('invoices').doc(docId)
+      await getInvoice.update({
+        invoicePaid: true,
+        invoicePending: false
+      })
+      commit('UPDATE_STATUS_TO_PAID', docId)
+    },
+    async updateStatusToPending ({ commit }, docId) {
+      const getInvoice = db.collection('invoices').doc(docId)
+      await getInvoice.update({
+        invoicePaid: false,
+        invoicePending: true,
+        invoiceDraft: false
+      })
+      commit('UPDATE_STATUS_TO_PENDING', docId)
     }
   },
   mutations: {
     SET_INVOICE_DATA (state, data) {
       state.invoiceData.push(data)
-    },
-    SET_INVOICES_LOADED (state) {
-      state.isInvoicesLoaded = true
     },
     TOGGLE_INVOICE (state) {
       state.isInvoiceModalOpen = !state.isInvoiceModalOpen
@@ -68,9 +98,37 @@ export default createStore({
     TOGGLE_ALERT (state) {
       state.isAlertModalActive = !state.isAlertModalActive
     },
+    SET_INVOICES_LOADED (state) {
+      state.isInvoicesLoaded = true
+    },
     SET_CURRENT_INVOICE (state, invoiceId) {
       state.currentInvoiceArray = state.invoiceData.filter((invoice) => {
         return invoice.invoiceId === invoiceId
+      })
+    },
+    TOGGLE_EDIT_INVOICE (state) {
+      state.isEditInvoiceClicked = !state.isEditInvoiceClicked
+    },
+    DELETE_INVOICE (state, docId) {
+      state.invoiceData = state.invoiceData.filter(
+        (invoice) => invoice.docId !== docId
+      )
+    },
+    UPDATE_STATUS_TO_PAID (state, docId) {
+      state.invoiceData.forEach((invoice) => {
+        if (invoice.docId === docId) {
+          invoice.invoicePaid = true
+          invoice.invoicePending = false
+        }
+      })
+    },
+    UPDATE_STATUS_TO_PENDING (state, docId) {
+      state.invoiceData.forEach((invoice) => {
+        if (invoice.docId === docId) {
+          invoice.invoicePaid = false
+          invoice.invoicePending = true
+          invoice.invoiceDraft = false
+        }
       })
     }
   },
@@ -78,19 +136,21 @@ export default createStore({
     invoiceData (state) {
       return state.invoiceData
     },
-    isInvoicesLoaded (state) {
-      return state.isInvoicesLoaded
-    },
     isInvoiceModalOpen (state) {
       return state.isInvoiceModalOpen
     },
     isAlertModalActive (state) {
       return state.isAlertModalActive
     },
+    isInvoicesLoaded (state) {
+      return state.isInvoicesLoaded
+    },
     currentInvoiceArray (state) {
       return state.currentInvoiceArray
+    },
+    isEditInvoiceClicked (state) {
+      return state.isEditInvoiceClicked
     }
   },
-  modules: {
-  }
+  modules: {}
 })

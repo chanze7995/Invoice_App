@@ -2,7 +2,8 @@
   <div @click="checkClick" ref="invoiceWrap" class="invoice-wrap">
     <form @submit.prevent="submitForm" class="invoice-content">
       <Loading v-show="isLoading" />
-      <h2 >New Invoice</h2>
+      <h2 v-if="!editInvoice">New Invoice</h2>
+      <h2 v-else>Edit Invoice</h2>
 
       <!-- Bill From -->
       <div class="bill-from">
@@ -125,7 +126,8 @@
 import Loading from '@/components/Loading.vue'
 
 import db from '../firebase/firebaseInit'
-import { ref, reactive, watch } from 'vue'
+import { ref, reactive, watch, computed } from 'vue'
+import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { uid } from 'uid'
 
@@ -135,10 +137,11 @@ export default {
     Loading
   },
   setup () {
+    const route = useRoute()
     const store = useStore()
     const isLoading = ref(null)
     const invoiceWrap = ref(null)
-    const invoiceModalInfo = reactive({
+    let invoiceModalInfo = reactive({
       dateOptions: { year: 'numeric', month: 'short', day: 'numeric' },
       docId: null,
       billerStreetAddress: null,
@@ -162,14 +165,25 @@ export default {
       invoiceItemList: [],
       invoiceTotal: 0
     })
+    const editInvoice = computed(() => {
+      return store.getters.isEditInvoiceClicked
+    })
+    if (!editInvoice.value) {
+      invoiceModalInfo.invoiceDateUnix = Date.now()
+      invoiceModalInfo.invoiceDate = new Date(invoiceModalInfo.invoiceDateUnix).toLocaleDateString('zh-tw', invoiceModalInfo.dateOptions)// 台灣格式
+      // invoiceModalInfo.invoiceDate = new Date(invoiceModalInfo.invoiceDateUnix).toLocaleDateString('en-us', invoiceModalInfo.dateOptions)
+    }
+    if (editInvoice.value) {
+      console.log(invoiceModalInfo)
+      console.log(store.getters.currentInvoiceArray[0])
+      invoiceModalInfo = store.getters.currentInvoiceArray[0]
+    }
     const closeInvoiceModal = () => {
       store.dispatch('toggleInvoiceModalOpen')
+      if (editInvoice.value) {
+        store.dispatch('toggleEditInvoiceClicked')
+      }
     }
-
-    invoiceModalInfo.invoiceDateUnix = Date.now()
-    invoiceModalInfo.invoiceDate = new Date(invoiceModalInfo.invoiceDateUnix).toLocaleDateString('zh-tw', invoiceModalInfo.dateOptions)// 台灣格式
-    // invoiceModalInfo.invoiceDate = new Date(invoiceModalInfo.invoiceDateUnix).toLocaleDateString('en-us', invoiceModalInfo.dateOptions)
-
     watch(() => invoiceModalInfo.paymentTerms, () => {
       const futureDate = new Date()
       invoiceModalInfo.paymentDueDateUnix = futureDate.setDate(futureDate.getDate() + parseInt(invoiceModalInfo.paymentTerms))
@@ -209,7 +223,6 @@ export default {
         invoiceModalInfo.invoiceTotal += item.total
       })
     }
-
     const uploadInvoice = async () => {
       if (invoiceModalInfo.invoiceItemList.length <= 0) {
         alert('Please ensure you filled out work items!')
@@ -251,8 +264,45 @@ export default {
 
       store.dispatch('getInvoiceData')
     }
+    const updateInvoice = async () => {
+      if (invoiceModalInfo.invoiceItemList.length <= 0) {
+        alert('Please ensure you filled out work items!')
+        return
+      }
+      isLoading.value = true
+      calInvoiceTotal()
+      const dataBase = db.collection('invoices').doc(invoiceModalInfo.docId)
+      await dataBase.update({
+        billerStreetAddress: invoiceModalInfo.billerStreetAddress,
+        billerCity: invoiceModalInfo.billerCity,
+        billerZipCode: invoiceModalInfo.billerZipCode,
+        billerCountry: invoiceModalInfo.billerCountry,
+        clientName: invoiceModalInfo.clientName,
+        clientEmail: invoiceModalInfo.clientEmail,
+        clientStreetAddress: invoiceModalInfo.clientStreetAddress,
+        clientCity: invoiceModalInfo.clientCity,
+        clientZipCode: invoiceModalInfo.clientZipCode,
+        clientCountry: invoiceModalInfo.clientCountry,
+        paymentTerms: invoiceModalInfo.paymentTerms,
+        paymentDueDate: invoiceModalInfo.paymentDueDate,
+        paymentDueDateUnix: invoiceModalInfo.paymentDueDateUnix,
+        productDescription: invoiceModalInfo.productDescription,
+        invoiceItemList: invoiceModalInfo.invoiceItemList,
+        invoiceTotal: invoiceModalInfo.invoiceTotal
+      })
+      isLoading.value = false
+      const data = {
+        docId: invoiceModalInfo.docId,
+        invoiceId: route.params.invoiceId
+      }
+      store.dispatch('updateInvoice', data)
+    }
 
     const submitForm = () => {
+      if (editInvoice.value) {
+        updateInvoice()
+        return
+      }
       uploadInvoice()
     }
 
@@ -266,6 +316,7 @@ export default {
       deleteInvoiceItem,
       saveDraft,
       publishInvoice,
+      editInvoice,
       submitForm
     }
   }

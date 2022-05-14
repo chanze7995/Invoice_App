@@ -98,12 +98,13 @@
 <script>
 import { computed } from 'vue'
 import { useStore } from 'vuex'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 export default {
   name: 'invoiceInfoView',
   setup () {
     const store = useStore()
     const route = useRoute()
+    const router = useRouter()
     const setCurrentInvoiceInfo = () => {
       const invoiceId = route.params.invoiceId
       store.dispatch('setCurrentInvoiceArray', invoiceId)
@@ -112,10 +113,32 @@ export default {
       return store.getters.currentInvoiceArray[0]
     })
 
+    const toggleEditInvoice = () => {
+      store.dispatch('toggleEditInvoiceClicked')
+      store.dispatch('toggleInvoiceModalOpen')
+    }
+
+    const deleteInvoice = async (docId) => {
+      await store.dispatch('deleteInvoice', docId)
+      router.push({ name: 'Home' })
+    }
+
+    const updateStatusToPaid = (docId) => {
+      store.dispatch('updateStatusToPaid', docId)
+    }
+
+    const updateStatusToPending = (docId) => {
+      store.dispatch('updateStatusToPending', docId)
+    }
+
     setCurrentInvoiceInfo()
 
     return {
-      currentInvoiceInfo
+      currentInvoiceInfo,
+      toggleEditInvoice,
+      deleteInvoice,
+      updateStatusToPaid,
+      updateStatusToPending
     }
   }
 }
