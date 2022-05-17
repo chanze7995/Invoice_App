@@ -11,5 +11,8 @@ module.exports = {
         path.resolve(__dirname, 'src/assets/scss/config/_reusable.scss')
       ]
     }
-  }
+  },
+  publicPath: process.env.NODE_ENV === 'production'
+    ? '/Invoice_App/'
+    : '/'
 }
