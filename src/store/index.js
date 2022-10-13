@@ -53,6 +53,7 @@ export default createStore({
       context.commit('TOGGLE_ALERT')
     },
     setCurrentInvoiceArray (context, invoiceId) {
+      // console.log('@1', invoiceId)
       context.commit('SET_CURRENT_INVOICE', invoiceId)
     },
     toggleEditInvoiceClicked (context) {
@@ -102,6 +103,11 @@ export default createStore({
       state.isInvoicesLoaded = true
     },
     SET_CURRENT_INVOICE (state, invoiceId) {
+      console.log('@2', state.currentInvoiceArray)
+      console.log('@22', state.invoiceData)
+      console.log('@222', state.currentInvoiceArray = state.invoiceData.filter((invoice) => {
+        return invoice.invoiceId === invoiceId
+      }))
       state.currentInvoiceArray = state.invoiceData.filter((invoice) => {
         return invoice.invoiceId === invoiceId
       })
@@ -143,6 +149,7 @@ export default createStore({
       return state.isAlertModalActive
     },
     isInvoicesLoaded (state) {
+      console.log('!', state.isProductsLoaded)
       return state.isInvoicesLoaded
     },
     currentInvoiceArray (state) {

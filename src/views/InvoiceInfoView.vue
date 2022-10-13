@@ -110,8 +110,11 @@ export default {
       store.dispatch('setCurrentInvoiceArray', invoiceId)
     }
     const currentInvoiceInfo = computed(() => {
+      // console.log('2', store.getters.currentInvoiceArray)
+
       return store.getters.currentInvoiceArray[0]
     })
+    // console.log('3', currentInvoiceInfo.value)
 
     const toggleEditInvoice = () => {
       store.dispatch('toggleEditInvoiceClicked')

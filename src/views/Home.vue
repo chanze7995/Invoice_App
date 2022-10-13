@@ -29,8 +29,8 @@
     </div>
     <div v-else class="empty">
       <img src="@/assets/images/illustration-empty.svg" alt="" />
-      <h3>There is nothing here</h3>
-      <p>Create a new invoice by clicking the New Invoice button and get started</p>
+      <h3>尚無任何請款單</h3>
+      <p>開始以點擊 New Invoice 建立一個新的請款單</p>
     </div>
   </div>
 </template>
