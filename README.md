@@ -1,9 +1,9 @@
-# 【 Invoice App 】發票請款單列表
+# 【 Invoice App 】請款單記帳列表
 ## [DEMO](https://chanze7995.github.io/Invoice_App/)
 
 ## 簡介
 
-以 Vue3.js 練習製作發票請款單列表，練習使用 Firebase。
+以 Vue3.js 練習製作請款單記帳列表，練習使用 Firebase。
 
 ## 網頁架構
 
